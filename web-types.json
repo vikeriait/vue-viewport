@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "name": "@vikeriait/vue-viewport",
+  "version": "1.0.0",
+  "description-markup": "markdown",
+  "js-types-syntax": "typescript",
+  "framework": "vue",
+  "contributions": {
+    "html": {
+      "vue-directives": [
+        {
+          "name": "viewport",
+          "description": "Detects when an element enters the viewport and applies animation classes.",
+          "doc-url": "https://github.com/vikeriait/vue-viewport",
+          "value": {
+            "kind": "expression",
+            "type": "string | ViewportOptions"
+          }
+        }
+      ]
+    }
+  }
+}

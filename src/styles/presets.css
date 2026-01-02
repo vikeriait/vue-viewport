@@ -1,0 +1,243 @@
+/* AUTO-GENERATED FILE - DO NOT EDIT MANUALLY */
+
+:root {
+  --viewport-duration: 0.6s;
+  --viewport-ease: ease-out;
+  --viewport-distance: 2rem;
+  --viewport-scale-in: 0.95;
+  --viewport-scale-out: 1.05;
+  --viewport-blur: 12px;
+}
+
+/* Base transition for all animations */
+[data-vp-preset*="animate-"] {
+  transition-duration: var(--viewport-duration);
+  transition-timing-function: var(--viewport-ease);
+}
+
+
+/* fade Group */
+[data-vp-preset~="animate-fade"],
+[data-vp-preset~="animate-fade-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-up"][data-vp-pos="above"] {
+  opacity: 0;
+  transition-property: opacity;
+}
+
+[data-vp-preset~="animate-fade"][data-vp-in-view],
+[data-vp-preset~="animate-fade-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1;
+}
+
+/* fade-up Group */
+[data-vp-preset~="animate-fade-up"],
+[data-vp-preset~="animate-fade-up-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-up-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-up-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-up-up"][data-vp-pos="above"] {
+  opacity: 0; transform: translateY(var(--viewport-distance));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-fade-up"][data-vp-in-view],
+[data-vp-preset~="animate-fade-up-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-up-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: translateY(0);
+}
+
+/* fade-down Group */
+[data-vp-preset~="animate-fade-down"],
+[data-vp-preset~="animate-fade-down-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-down-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-down-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-down-up"][data-vp-pos="above"] {
+  opacity: 0; transform: translateY(calc(var(--viewport-distance) * -1));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-fade-down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-down-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-down-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: translateY(0);
+}
+
+/* fade-left Group */
+[data-vp-preset~="animate-fade-left"],
+[data-vp-preset~="animate-fade-left-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-left-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-left-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-left-up"][data-vp-pos="above"] {
+  opacity: 0; transform: translateX(var(--viewport-distance));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-fade-left"][data-vp-in-view],
+[data-vp-preset~="animate-fade-left-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-left-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: translateX(0);
+}
+
+/* fade-right Group */
+[data-vp-preset~="animate-fade-right"],
+[data-vp-preset~="animate-fade-right-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-right-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-right-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-right-up"][data-vp-pos="above"] {
+  opacity: 0; transform: translateX(calc(var(--viewport-distance) * -1));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-fade-right"][data-vp-in-view],
+[data-vp-preset~="animate-fade-right-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-fade-right-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: translateX(0);
+}
+
+/* slide-up Group */
+[data-vp-preset~="animate-slide-up"],
+[data-vp-preset~="animate-slide-up-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-up-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-slide-up-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-up-up"][data-vp-pos="above"] {
+  transform: translateY(var(--viewport-distance));
+  transition-property: transform;
+}
+
+[data-vp-preset~="animate-slide-up"][data-vp-in-view],
+[data-vp-preset~="animate-slide-up-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-slide-up-up"][data-vp-entry="up"][data-vp-in-view] {
+  transform: translateY(0);
+}
+
+/* slide-down Group */
+[data-vp-preset~="animate-slide-down"],
+[data-vp-preset~="animate-slide-down-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-down-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-slide-down-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-down-up"][data-vp-pos="above"] {
+  transform: translateY(calc(var(--viewport-distance) * -1));
+  transition-property: transform;
+}
+
+[data-vp-preset~="animate-slide-down"][data-vp-in-view],
+[data-vp-preset~="animate-slide-down-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-slide-down-up"][data-vp-entry="up"][data-vp-in-view] {
+  transform: translateY(0);
+}
+
+/* slide-left Group */
+[data-vp-preset~="animate-slide-left"],
+[data-vp-preset~="animate-slide-left-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-left-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-slide-left-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-left-up"][data-vp-pos="above"] {
+  transform: translateX(var(--viewport-distance));
+  transition-property: transform;
+}
+
+[data-vp-preset~="animate-slide-left"][data-vp-in-view],
+[data-vp-preset~="animate-slide-left-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-slide-left-up"][data-vp-entry="up"][data-vp-in-view] {
+  transform: translateX(0);
+}
+
+/* slide-right Group */
+[data-vp-preset~="animate-slide-right"],
+[data-vp-preset~="animate-slide-right-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-right-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-slide-right-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-right-up"][data-vp-pos="above"] {
+  transform: translateX(calc(var(--viewport-distance) * -1));
+  transition-property: transform;
+}
+
+[data-vp-preset~="animate-slide-right"][data-vp-in-view],
+[data-vp-preset~="animate-slide-right-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-slide-right-up"][data-vp-entry="up"][data-vp-in-view] {
+  transform: translateX(0);
+}
+
+/* scale-up Group */
+[data-vp-preset~="animate-scale-up"],
+[data-vp-preset~="animate-scale-up-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-scale-up-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-scale-up-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-scale-up-up"][data-vp-pos="above"] {
+  opacity: 0; transform: scale(var(--viewport-scale-in));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-scale-up"][data-vp-in-view],
+[data-vp-preset~="animate-scale-up-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-scale-up-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: scale(1);
+}
+
+/* scale-down Group */
+[data-vp-preset~="animate-scale-down"],
+[data-vp-preset~="animate-scale-down-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-scale-down-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-scale-down-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-scale-down-up"][data-vp-pos="above"] {
+  opacity: 0; transform: scale(var(--viewport-scale-out));
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-scale-down"][data-vp-in-view],
+[data-vp-preset~="animate-scale-down-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-scale-down-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; transform: scale(1);
+}
+
+/* blur-in Group */
+[data-vp-preset~="animate-blur-in"],
+[data-vp-preset~="animate-blur-in-down"][data-vp-entry="down"],
+[data-vp-preset~="animate-blur-in-down"][data-vp-pos="below"],
+[data-vp-preset~="animate-blur-in-up"][data-vp-entry="up"],
+[data-vp-preset~="animate-blur-in-up"][data-vp-pos="above"] {
+  opacity: 0; filter: blur(var(--viewport-blur));
+  transition-property: opacity, filter;
+}
+
+[data-vp-preset~="animate-blur-in"][data-vp-in-view],
+[data-vp-preset~="animate-blur-in-down"][data-vp-entry="down"][data-vp-in-view],
+[data-vp-preset~="animate-blur-in-up"][data-vp-entry="up"][data-vp-in-view] {
+  opacity: 1; filter: blur(0);
+}
+
+/* SMART PRESETS (Composite) */
+/* fade-y */
+[data-vp-preset~="animate-fade-y"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-y"][data-vp-pos="below"],
+[data-vp-preset~="animate-fade-y"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-y"][data-vp-pos="above"] {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+
+[data-vp-preset~="animate-fade-y"][data-vp-entry="down"],
+[data-vp-preset~="animate-fade-y"][data-vp-pos="below"] { transform: translateY(var(--viewport-distance)); }
+
+[data-vp-preset~="animate-fade-y"][data-vp-entry="up"],
+[data-vp-preset~="animate-fade-y"][data-vp-pos="above"] { transform: translateY(calc(var(--viewport-distance) * -1)); }
+
+[data-vp-preset~="animate-fade-y"][data-vp-in-view] { opacity: 1; transform: translateY(0); }
+
+/* slide-y */
+[data-vp-preset~="animate-slide-y"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-y"][data-vp-pos="below"],
+[data-vp-preset~="animate-slide-y"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-y"][data-vp-pos="above"] {
+  transition-property: transform;
+}
+
+[data-vp-preset~="animate-slide-y"][data-vp-entry="down"],
+[data-vp-preset~="animate-slide-y"][data-vp-pos="below"] { transform: translateY(var(--viewport-distance)); }
+
+[data-vp-preset~="animate-slide-y"][data-vp-entry="up"],
+[data-vp-preset~="animate-slide-y"][data-vp-pos="above"] { transform: translateY(calc(var(--viewport-distance) * -1)); }
+
+[data-vp-preset~="animate-slide-y"][data-vp-in-view] { transform: translateY(0); }
