@@ -1,0 +1,8 @@
+@import "./presets.css" layer(utilities);
+
+@custom-variant inviewport (&[data-vp-in-view]);
+@custom-variant inviewport-down (&[data-vp-in-view][data-vp-entry="down"]);
+@custom-variant inviewport-up (&[data-vp-in-view][data-vp-entry="up"]);
+@custom-variant aboveviewport (&[data-vp-pos="above"]);
+@custom-variant belowviewport (&[data-vp-pos="below"]);
+
