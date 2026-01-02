@@ -16,7 +16,14 @@ export interface ViewportOptions extends IntersectionObserverInit {
    */
   animation?: string
   /**
-   * If true, the observer will disconnect after the first intersection.
+   * Stagger delay for elements entering together.
+   * - `number`: milliseconds
+   * - `string`: CSS time (e.g. '100ms', '0.1s')
+   * - `true`: uses global `--viewport-stagger` variable
+   */
+  stagger?: number | string | boolean
+  /**
+   * If true, the observer will disconnect after the first entry.
    */
   once?: boolean
   /**

@@ -97,6 +97,24 @@ Restrict animations to a specific scroll direction by appending `-down` (scrolli
 </div>
 ```
 
+#### 5. Staggering
+Delay animations for elements entering at the same time. The library guarantees DOM order execution.
+
+You can pass:
+- `number`: Delay in milliseconds (e.g. `100`).
+- `string`: CSS time value (e.g. `'200ms'`, `'0.1s'`).
+- `true`: Uses the global default `--viewport-stagger` (default: 100ms).
+
+*Note: The stagger delay is **additive** to any existing CSS delay.*
+
+```html
+<!-- Explicit value -->
+<div v-for="i in 6" v-viewport="{ animation: 'fade-up', stagger: 100 }"></div>
+
+<!-- Use default from CSS variable -->
+<div v-for="i in 6" v-viewport="{ animation: 'fade-up', stagger: true }"></div>
+```
+
 ### Advanced: Tailwind & Custom Styles
 
 The library is **smart**. If you use custom transforms (via Tailwind classes or inline styles), it detects them and automatically adjusts the IntersectionObserver's `rootMargin` to ensure the animation triggers precisely when the *visual* element enters the screen.
@@ -167,6 +185,7 @@ You can customize the global defaults in your CSS:
     --viewport-duration: 0.6s;
     --viewport-ease: ease-out;
     --viewport-distance: 2rem;
+    --viewport-stagger: 100ms;
     --viewport-scale-in: 0.95;
     --viewport-scale-out: 1.05;
     --viewport-blur: 12px;
@@ -190,6 +209,7 @@ Options object passed as `v-viewport="{ ... }"`.
 | Option | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `animation` | `string` | `undefined` | The animation class or preset name(s). |
+| `stagger` | `number \| string \| boolean` | `undefined` | Delay (ms/string) or `true` for global default. |
 | `once` | `boolean` | `false` | Disconnect after first entry. |
 | `threshold` | `number \| number[]` | `0.2` | IntersectionObserver threshold. |
 | `rootMargin` | `string` | `auto` | Manually override the calculated margin. |

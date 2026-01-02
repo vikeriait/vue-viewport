@@ -28,6 +28,26 @@ function resolveConfig(binding: DirectiveBinding<ViewportOptions | string>): Res
 }
 
 /**
+ * Resolves the stagger option into a numeric delay in milliseconds.
+ * - number: returns as is
+ * - string: parses "100ms", "0.5s"
+ * - true: reads --viewport-stagger CSS variable
+ */
+function resolveStaggerValue(value: number | string | boolean | undefined, el: HTMLElement): number {
+  if (typeof value === 'number') return value
+  
+  if (typeof value === 'string') return parseDelay(value)
+  
+  if (value === true) {
+    const style = getComputedStyle(el)
+    const cssVar = style.getPropertyValue('--viewport-stagger').trim()
+    return parseDelay(cssVar)
+  }
+  
+  return 0
+}
+
+/**
  * Handles the logic when the element enters the viewport.
  * Sets data attributes for entry direction and in-view state.
  */
@@ -37,6 +57,106 @@ function handleEnter(
   direction: ViewportDirection, 
   options: ViewportOptions
 ): void {
+  const task: StaggerTask = { el, entry, direction, options }
+  const staggerValue = resolveStaggerValue(options.stagger, el)
+
+  // Apply stagger if defined
+  if (staggerValue > 0) {
+    scheduleStagger(task, staggerValue)
+  } else {
+    performEnter(task, 0)
+  }
+}
+
+/**
+ * Handles the logic when the element leaves the viewport.
+ * Removes in-view attribute and sets position (above/below).
+ */
+function handleLeave(
+  el: HTMLElement, 
+  entry: IntersectionObserverEntry, 
+  direction: ViewportDirection, 
+  options: ViewportOptions
+): void {
+  // Remove inline delay on leave so it doesn't affect re-entry or other transitions
+  el.style.removeProperty('transition-delay')
+
+  delete el.dataset.vpInView
+  delete el.dataset.vpEntry
+  
+  const rect = entry.boundingClientRect
+  if (rect.top < 0) {
+    el.dataset.vpPos = 'above'
+  } else if (rect.bottom > window.innerHeight) {
+    el.dataset.vpPos = 'below'
+  }
+  
+  options.onLeave?.(entry, direction)
+
+  el.dispatchEvent(new CustomEvent('view-leave', {
+    detail: { entry, direction }
+  }))
+}
+const observers = new WeakMap<HTMLElement, IntersectionObserver>()
+
+// --- Stagger Logic ---
+
+interface StaggerTask {
+  el: HTMLElement
+  entry: IntersectionObserverEntry
+  direction: ViewportDirection
+  options: ViewportOptions
+}
+
+interface StaggerState {
+  queue: StaggerTask[]
+  timeout: number
+}
+
+const staggerMap = new WeakMap<HTMLElement, StaggerState>()
+
+/**
+ * Parses a CSS time string (e.g. "0.5s", "300ms") into milliseconds.
+ */
+function parseDelay(value: string): number {
+  if (!value) return 0
+  // Handle multiple values (e.g. "0s, 0.5s"), take the max or first? 
+  // Usually transition-delay matches transition-property count. 
+  // We take the max value found to be safe, or just the first.
+  // Let's split by comma and take the max to ensure we don't cut off a long delay.
+  const delays = value.split(',').map(v => {
+    const match = /([\d.]+)(m?s)/.exec(v.trim())
+    if (!match) return 0
+    const num = parseFloat(match[1])
+    const unit = match[2]
+    return unit === 's' ? num * 1000 : num
+  })
+  return Math.max(...delays)
+}
+
+/**
+ * Applies the entry logic to a single element.
+ */
+function performEnter(task: StaggerTask, staggerDelay: number = 0) {
+  const { el, entry, direction, options } = task
+
+  // Calculate total delay: existing CSS delay + stagger delay
+  let totalDelay = staggerDelay
+  
+  // Only read computed style if we have a stagger to apply, 
+  // otherwise we just let the CSS delay work as is.
+  // EXCEPT: if index > 0, we MUST apply inline style. 
+  // If we don't add base delay, we overwrite it.
+  if (staggerDelay > 0) {
+    const style = getComputedStyle(el)
+    const baseDelay = parseDelay(style.transitionDelay)
+    totalDelay += baseDelay
+  }
+
+  if (totalDelay > 0) {
+    el.style.transitionDelay = `${totalDelay}ms`
+  }
+
   // Set entry direction
   el.dataset.vpEntry = direction
   
@@ -56,33 +176,51 @@ function handleEnter(
 }
 
 /**
- * Handles the logic when the element leaves the viewport.
- * Removes in-view attribute and sets position (above/below).
+ * Flushes the queue for a specific parent: sorts elements by DOM order,
+ * calculates delays, and executes entry.
  */
-function handleLeave(
-  el: HTMLElement, 
-  entry: IntersectionObserverEntry, 
-  direction: ViewportDirection,
-  options: ViewportOptions
-): void {
-  delete el.dataset.vpInView
-  delete el.dataset.vpEntry
-  
-  const rect = entry.boundingClientRect
-  if (rect.top < 0) {
-    el.dataset.vpPos = 'above'
-  } else if (rect.bottom > window.innerHeight) {
-    el.dataset.vpPos = 'below'
-  }
-  
-  options.onLeave?.(entry, direction)
+function flushStaggerQueue(parent: HTMLElement, staggerValue: number) {
+  const state = staggerMap.get(parent)
+  if (!state || state.queue.length === 0) return
 
-  el.dispatchEvent(new CustomEvent('view-leave', {
-    detail: { entry, direction }
-  }))
+  const sortedQueue = state.queue.sort((a, b) => {
+    // Sort by DOM order
+    return (a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1
+  })
+
+  sortedQueue.forEach((task, index) => {
+    performEnter(task, index * staggerValue)
+  })
+
+  // Reset queue
+  state.queue = []
 }
 
-const observers = new WeakMap<HTMLElement, IntersectionObserver>()
+/**
+ * Schedules an element for staggered entry.
+ */
+function scheduleStagger(task: StaggerTask, staggerValue: number) {
+  const parent = task.el.parentElement
+  if (!parent) {
+    performEnter(task, 0)
+    return
+  }
+
+  let state = staggerMap.get(parent)
+  if (!state) {
+    state = { queue: [], timeout: 0 }
+    staggerMap.set(parent, state)
+  }
+
+  state.queue.push(task)
+
+  if (state.timeout) clearTimeout(state.timeout)
+
+  // Debounce to collect all elements in the same frame/tick
+  state.timeout = window.setTimeout(() => {
+    flushStaggerQueue(parent, staggerValue)
+  }, 10) // Small buffer to catch all IO callbacks
+}
 
 /**
  * Vue Directive: v-viewport

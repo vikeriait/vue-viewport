@@ -8,6 +8,7 @@ const VARS = `
   --viewport-duration: 0.6s;
   --viewport-ease: ease-out;
   --viewport-distance: 2rem;
+  --viewport-stagger: 100ms;
   --viewport-scale-in: 0.95;
   --viewport-scale-out: 1.05;
   --viewport-blur: 12px;
