@@ -242,3 +242,15 @@
 [data-vp-preset~="animate-slide-y"][data-vp-pos="above"] { transform: translateY(calc(var(--viewport-distance) * -1)); }
 
 [data-vp-preset~="animate-slide-y"][data-vp-in-view] { transform: translateY(0); }
+
+/* ACCESSIBILITY & PRINT OVERRIDES */
+@media (prefers-reduced-motion: reduce), print {
+  [data-vp-mounted] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    filter: none !important;
+    animation: none !important;
+    translate: none !important;
+  }
+}

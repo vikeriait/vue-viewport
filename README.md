@@ -12,6 +12,7 @@ A lightweight, high-performance Vue 3 directive and composable to detect when el
 - 🔀 **Conditional Logic**: Apply animations only when scrolling `down` or `up`.
 - 🛠 **Customizable**: Works with custom CSS, inline styles (`style="transform:..."`), and Tailwind classes.
 - 📦 **Composable**: `useInViewport` for programmatic control.
+- ♿ **Accessibility**: Respects `prefers-reduced-motion` out of the box.
 - 🦾 **TypeScript**: Fully typed.
 
 ## Installation
@@ -191,6 +192,13 @@ You can customize the global defaults in your CSS:
     --viewport-blur: 12px;
 }
 ```
+
+## Accessibility & Print
+
+The library is designed to be inclusive and reliable:
+
+- **Reduced Motion**: If a user has enabled "Reduce Motion" in their system settings, the library automatically detects the `@media (prefers-reduced-motion: reduce)` preference. In this case, all animations are disabled, and elements appear instantly in their final state (`opacity: 1`, `transform: none`).
+- **Print Friendly**: When printing a page, all animations and initial "hidden" states are stripped away via `@media print`. This ensures that all content is fully visible and correctly positioned on the physical or PDF page.
 
 ## API Reference
 

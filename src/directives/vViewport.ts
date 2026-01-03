@@ -233,6 +233,9 @@ function scheduleStagger(task: StaggerTask, staggerValue: number) {
 export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
   // Apply the preset attribute in beforeMount
   beforeMount(el, binding) {
+    // Mark element as managed by vue-viewport for global CSS targeting (A11y)
+    el.dataset.vpMounted = ''
+
     const { animationName } = resolveConfig(binding)
     
     if (animationName) {
