@@ -116,6 +116,15 @@ You can pass:
 <div v-for="i in 6" v-viewport="{ animation: 'fade-up', stagger: true }"></div>
 ```
 
+#### 6. Inline Timing Control
+You can override the global defaults or utility classes directly via options. This is useful for dynamic values.
+
+```html
+<div v-viewport="{ animation: 'fade-up', duration: 1000, delay: 500, easing: 'ease-in-out' }">
+  I have custom timing!
+</div>
+```
+
 ### Component `<VViewport />`
 
 Prefer components over directives? We got you.
@@ -148,6 +157,9 @@ import { Viewport } from '@vikeriait/vue-viewport'
 - `as`: (string) HTML tag (default: 'div').
 - `preset`: (string) Animation name.
 - `stagger`: (number/string/boolean) Delay logic.
+- `duration`: (number/string) Custom duration.
+- `delay`: (number/string) Custom delay.
+- `easing`: (string) Custom easing.
 - `once`: (boolean) Disconnect after first entry.
 - `threshold`: (number) Intersection threshold.
 - `rootMargin`: (string) Custom margin.
@@ -221,6 +233,7 @@ You can customize the global defaults in your CSS:
 :root {
     --viewport-duration: 0.6s;
     --viewport-ease: ease-out;
+    --viewport-delay: 0s; /* Global default delay */
     --viewport-distance: 2rem;
     --viewport-stagger: 100ms;
     --viewport-scale-in: 0.95;
@@ -254,6 +267,9 @@ Options object passed as `v-viewport="{ ... }"`.
 | :--- | :--- | :--- | :--- |
 | `animation` | `string` | `undefined` | The animation class or preset name(s). |
 | `stagger` | `number \| string \| boolean` | `undefined` | Delay (ms/string) or `true` for global default. |
+| `duration` | `number \| string` | `undefined` | Custom duration. |
+| `delay` | `number \| string` | `undefined` | Custom delay. |
+| `easing` | `string` | `undefined` | Custom easing function. |
 | `once` | `boolean` | `false` | Disconnect after first entry. |
 | `threshold` | `number \| number[]` | `0.1` | IntersectionObserver threshold. |
 | `rootMargin` | `string` | `auto` | Manually override the calculated margin. |

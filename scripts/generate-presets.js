@@ -7,6 +7,7 @@ const VARS = `
 :root {
   --viewport-duration: 0.6s;
   --viewport-ease: ease-out;
+  --viewport-delay: 0s;
   --viewport-distance: 2rem;
   --viewport-stagger: 100ms;
   --viewport-scale-in: 0.95;
@@ -18,6 +19,7 @@ const VARS = `
 [data-vp-preset*="animate-"] {
   transition-duration: var(--viewport-duration);
   transition-timing-function: var(--viewport-ease);
+  transition-delay: var(--viewport-delay);
 }
 `;
 

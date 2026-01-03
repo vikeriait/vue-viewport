@@ -79,8 +79,12 @@ function handleLeave(
   direction: ViewportDirection, 
   options: ViewportOptions
 ): void {
-  // Remove inline delay on leave so it doesn't affect re-entry or other transitions
-  el.style.removeProperty('transition-delay')
+  // Reset delay to the original option value on leave
+  if (options.delay !== undefined) {
+    el.style.transitionDelay = formatTime(options.delay)!
+  } else {
+    el.style.removeProperty('transition-delay')
+  }
 
   delete el.dataset.vpInView
   delete el.dataset.vpEntry
@@ -147,8 +151,6 @@ function performEnter(task: StaggerTask, staggerDelay: number = 0) {
   
   // Only read computed style if we have a stagger to apply, 
   // otherwise we just let the CSS delay work as is.
-  // EXCEPT: if index > 0, we MUST apply inline style. 
-  // If we don't add base delay, we overwrite it.
   if (staggerDelay > 0) {
     const style = getComputedStyle(el)
     const baseDelay = parseDelay(style.transitionDelay)
@@ -225,6 +227,14 @@ function scheduleStagger(task: StaggerTask, staggerValue: number) {
 }
 
 /**
+ * Formats a numeric value as milliseconds or returns the string as is.
+ */
+function formatTime(value: number | string | undefined): string | undefined {
+  if (typeof value === 'number') return `${value}ms`
+  return value
+}
+
+/**
  * Vue Directive: v-viewport
  * 
  * Detects when an element enters the viewport and applies animation states via data attributes.
@@ -236,8 +246,19 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
     // Mark element as managed by vue-viewport for global CSS targeting (A11y)
     el.dataset.vpMounted = ''
 
-    const { animationName } = resolveConfig(binding)
+    const { options, animationName } = resolveConfig(binding)
     
+    // Apply inline style overrides if provided in options
+    if (options.duration !== undefined) {
+      el.style.transitionDuration = formatTime(options.duration)!
+    }
+    if (options.delay !== undefined) {
+      el.style.transitionDelay = formatTime(options.delay)!
+    }
+    if (options.easing !== undefined) {
+      el.style.transitionTimingFunction = options.easing
+    }
+
     if (animationName) {
       // Resolve preset name (handle custom aliases if any)
       // Strict mode: Only accept valid presets from ACTIVE_PRESETS

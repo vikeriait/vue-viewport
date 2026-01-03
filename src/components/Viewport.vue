@@ -42,6 +42,21 @@ const props = defineProps({
   root: {
     type: Object as PropType<ViewportOptions['root']>,
     default: undefined
+  },
+  /** Custom duration for the animation. */
+  duration: {
+    type: [Number, String] as PropType<ViewportOptions['duration']>,
+    default: undefined
+  },
+  /** Custom delay for the animation. */
+  delay: {
+    type: [Number, String] as PropType<ViewportOptions['delay']>,
+    default: undefined
+  },
+  /** Custom easing for the animation. */
+  easing: {
+    type: String,
+    default: undefined
   }
 })
 
@@ -58,6 +73,9 @@ const viewportOptions = {
   rootMargin: props.rootMargin,
   once: props.once,
   root: props.root,
+  duration: props.duration,
+  delay: props.delay,
+  easing: props.easing,
   onEnter: (entry: IntersectionObserverEntry, direction: ViewportDirection) => {
     emit('enter', { entry, direction })
   },

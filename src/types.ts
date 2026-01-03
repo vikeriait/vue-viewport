@@ -23,6 +23,22 @@ export interface ViewportOptions extends IntersectionObserverInit {
    */
   stagger?: number | string | boolean
   /**
+   * Custom duration for the animation.
+   * - `number`: milliseconds
+   * - `string`: CSS time (e.g. '1000ms', '1s')
+   */
+  duration?: number | string
+  /**
+   * Custom delay for the animation.
+   * - `number`: milliseconds
+   * - `string`: CSS time (e.g. '500ms', '0.5s')
+   */
+  delay?: number | string
+  /**
+   * Custom easing for the animation (e.g. 'ease-in-out', 'cubic-bezier(...)').
+   */
+  easing?: string
+  /**
    * If true, the observer will disconnect after the first entry.
    */
   once?: boolean
