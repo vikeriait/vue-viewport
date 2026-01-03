@@ -1,6 +1,7 @@
 import type { Directive, DirectiveBinding } from 'vue'
 import { ACTIVE_PRESETS } from '../constants'
 import { computeDefaultRootMargin } from '../utils'
+import { observerManager, type ObserverInstance } from '../utils/observer'
 import type { ViewportOptions, ViewportDirection, ResolvedConfig } from '../types'
 
 /**
@@ -97,7 +98,8 @@ function handleLeave(
     detail: { entry, direction }
   }))
 }
-const observers = new WeakMap<HTMLElement, IntersectionObserver>()
+
+const observers = new WeakMap<HTMLElement, ObserverInstance>()
 
 // --- Stagger Logic ---
 
@@ -262,32 +264,29 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
 
     let lastScrollY = window.scrollY
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const isInView = entry.isIntersecting
-        const scrollY = window.scrollY
-        
-        const direction = scrollY >= lastScrollY ? 'down' : 'up'
-        lastScrollY = scrollY
+    // Use ObserverManager instead of creating a new instance
+    const instance = observerManager.observe(el, observerOptions, (entry) => {
+      const isInView = entry.isIntersecting
+      const scrollY = window.scrollY
+      
+      const direction = scrollY >= lastScrollY ? 'down' : 'up'
+      lastScrollY = scrollY
 
-        if (isInView) {
-          handleEnter(el, entry, direction, options)
-          if (once) observer.unobserve(el)
-        } else {
-          handleLeave(el, entry, direction, options)
-        }
-      })
-    }, observerOptions)
-
-    observer.observe(el)
+      if (isInView) {
+        handleEnter(el, entry, direction, options)
+        if (once) observerManager.unobserve(instance, el)
+      } else {
+        handleLeave(el, entry, direction, options)
+      }
+    })
     
-    observers.set(el, observer)
+    observers.set(el, instance)
   },
 
   unmounted(el) {
-    const observer = observers.get(el)
-    if (observer) {
-      observer.disconnect()
+    const instance = observers.get(el)
+    if (instance) {
+      observerManager.unobserve(instance, el)
       observers.delete(el)
     }
   }

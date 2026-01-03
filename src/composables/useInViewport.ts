@@ -1,5 +1,6 @@
 import { ref, type Ref, onMounted, onUnmounted } from 'vue'
 import type { UseInViewportReturn } from '../types'
+import { observerManager, type ObserverInstance } from '../utils/observer'
 
 /**
  * A composable that tracks whether an element is within the viewport.
@@ -18,20 +19,23 @@ export function useInViewport(target: Ref<HTMLElement | null>, options: Intersec
   const isInView = ref(false)
   const entry = ref<IntersectionObserverEntry | null>(null)
   
-  let observer: IntersectionObserver | null = null
+  let instance: ObserverInstance | null = null
+  let el: HTMLElement | null = null
 
   onMounted(() => {
     if (target.value) {
-      observer = new IntersectionObserver(([e]) => {
+      el = target.value
+      instance = observerManager.observe(el, options, (e) => {
         isInView.value = e.isIntersecting
         entry.value = e
-      }, options)
-      observer.observe(target.value)
+      })
     }
   })
 
   onUnmounted(() => {
-    if (observer) observer.disconnect()
+    if (instance && el) {
+      observerManager.unobserve(instance, el)
+    }
   })
 
   return { isInView, entry }
