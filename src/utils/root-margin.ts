@@ -41,7 +41,8 @@ function parseTailwindMargins(className: string): { top: number, bottom: number 
 function checkPresetHeuristics(el: HTMLElement, animationName?: string): { top: number, bottom: number } {
   const nameHasMovement = animationName && (
     animationName.includes('slide') || 
-    (animationName.includes('fade-') && !animationName.includes('fade-in'))
+    (animationName.includes('fade-') && !animationName.includes('fade-in')) ||
+    animationName.includes('scale')
   )
 
   if (nameHasMovement) {

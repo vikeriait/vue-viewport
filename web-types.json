@@ -37,7 +37,7 @@
             {
               "name": "threshold",
               "description": "Intersection threshold (0.0 - 1.0) or array of thresholds.",
-              "default": "0.2",
+              "default": "0.1",
               "value": { "kind": "expression", "type": "number | number[]" }
             },
             {

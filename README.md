@@ -255,7 +255,7 @@ Options object passed as `v-viewport="{ ... }"`.
 | `animation` | `string` | `undefined` | The animation class or preset name(s). |
 | `stagger` | `number \| string \| boolean` | `undefined` | Delay (ms/string) or `true` for global default. |
 | `once` | `boolean` | `false` | Disconnect after first entry. |
-| `threshold` | `number \| number[]` | `0.2` | IntersectionObserver threshold. |
+| `threshold` | `number \| number[]` | `0.1` | IntersectionObserver threshold. |
 | `rootMargin` | `string` | `auto` | Manually override the calculated margin. |
 | `onEnter` | `function` | `-` | Callback when entering viewport. |
 | `onLeave` | `function` | `-` | Callback when leaving viewport. |

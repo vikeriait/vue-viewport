@@ -42,7 +42,7 @@ function resolveStaggerValue(value: number | string | boolean | undefined, el: H
   if (value === true) {
     const style = getComputedStyle(el)
     const cssVar = style.getPropertyValue('--viewport-stagger').trim()
-    return parseDelay(cssVar)
+    return parseDelay(cssVar || '100ms')
   }
   
   return 0
@@ -262,7 +262,7 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
     const observerOptions: IntersectionObserverInit = {
       root: options.root || null,
       rootMargin: options.rootMargin || computeDefaultRootMargin(el, animationName),
-      threshold: options.threshold ?? 0.2,
+      threshold: options.threshold ?? 0.1,
     }
 
     let lastScrollY = window.scrollY
