@@ -9,12 +9,13 @@
 
 import type { App, Plugin } from 'vue'
 import { vViewport } from './directives/vViewport'
+import Viewport from './components/Viewport.vue'
 import { configurePresets } from './constants'
 import type { ViewportPluginOptions } from './types'
 
 export * from './types'
 export * from './composables/useInViewport'
-export { vViewport }
+export { vViewport, Viewport }
 
 export const ViewportPlugin: Plugin = {
   install(app: App, options?: ViewportPluginOptions) {
@@ -22,6 +23,7 @@ export const ViewportPlugin: Plugin = {
       configurePresets(options.presets)
     }
     app.directive('viewport', vViewport)
+    app.component('VViewport', Viewport)
   }
 }
 

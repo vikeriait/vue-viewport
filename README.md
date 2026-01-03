@@ -116,6 +116,42 @@ You can pass:
 <div v-for="i in 6" v-viewport="{ animation: 'fade-up', stagger: true }"></div>
 ```
 
+### Component `<VViewport />`
+
+Prefer components over directives? We got you.
+
+**Global Usage:**
+The plugin registers the component globally as `<VViewport />`.
+
+```html
+<VViewport preset="fade-up">
+  <h1>Hello World</h1>
+</VViewport>
+```
+
+**Local Import:**
+You can also import it directly (exported as `Viewport`).
+
+```html
+<script setup>
+import { Viewport } from '@vikeriait/vue-viewport'
+</script>
+
+<template>
+  <Viewport as="section" preset="fade-up" :stagger="100">
+    ...
+  </Viewport>
+</template>
+```
+
+**Props:**
+- `as`: (string) HTML tag (default: 'div').
+- `preset`: (string) Animation name.
+- `stagger`: (number/string/boolean) Delay logic.
+- `once`: (boolean) Disconnect after first entry.
+- `threshold`: (number) Intersection threshold.
+- `rootMargin`: (string) Custom margin.
+
 ### Advanced: Tailwind & Custom Styles
 
 The library is **smart**. If you use custom transforms (via Tailwind classes or inline styles), it detects them and automatically adjusts the IntersectionObserver's `rootMargin` to ensure the animation triggers precisely when the *visual* element enters the screen.

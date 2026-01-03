@@ -7,6 +7,56 @@
   "framework": "vue",
   "contributions": {
     "html": {
+      "tags": [
+        {
+          "name": "VViewport",
+          "description": "Wrapper component for viewport detection and scroll animations.",
+          "attributes": [
+            {
+              "name": "as",
+              "description": "The HTML tag to render.",
+              "default": "div",
+              "value": { "kind": "expression", "type": "string" }
+            },
+            {
+              "name": "preset",
+              "description": "The animation preset name (e.g., 'fade-up').",
+              "value": { "kind": "expression", "type": "string" }
+            },
+            {
+              "name": "stagger",
+              "description": "Delay in ms or CSS string. Set to true for global default.",
+              "value": { "kind": "expression", "type": "number | string | boolean" }
+            },
+            {
+              "name": "once",
+              "description": "If true, disconnects observer after first entry.",
+              "default": "false",
+              "value": { "kind": "expression", "type": "boolean" }
+            },
+            {
+              "name": "threshold",
+              "description": "Intersection threshold (0.0 - 1.0) or array of thresholds.",
+              "default": "0.2",
+              "value": { "kind": "expression", "type": "number | number[]" }
+            },
+            {
+              "name": "rootMargin",
+              "description": "Custom rootMargin string (e.g. '10px 0px').",
+              "value": { "kind": "expression", "type": "string" }
+            },
+            {
+              "name": "root",
+              "description": "Custom root element for the observer.",
+              "value": { "kind": "expression", "type": "Element | Document" }
+            }
+          ],
+          "events": [
+            { "name": "enter", "description": "Triggered when element enters viewport." },
+            { "name": "leave", "description": "Triggered when element leaves viewport." }
+          ]
+        }
+      ],
       "vue-directives": [
         {
           "name": "viewport",
