@@ -1,6 +1,11 @@
 # @vikeriait/vue-viewport
 
+[![Documentation](https://img.shields.io/badge/documentation-online-42b883?style=for-the-badge&logo=read-the-docs&logoColor=white)](https://vue-viewport.vikeria.it)
+[![npm version](https://img.shields.io/npm/v/@vikeriait/vue-viewport?style=for-the-badge&color=blue)](https://www.npmjs.com/package/@vikeriait/vue-viewport)
+
 A lightweight, high-performance Vue 3 directive and composable to detect when elements enter the viewport, featuring "Smart Presets", automatic margin compensation for smooth reveals, and seamless Tailwind CSS integration.
+
+**📚 Full Documentation:** [https://vue-viewport.vikeria.it](https://vue-viewport.vikeria.it)
 
 ## Features
 

@@ -130,3 +130,6 @@ dist
 # Vite
 *.local
 
+# VitePress
+docs/.vitepress/cache
+docs/.vitepress/dist

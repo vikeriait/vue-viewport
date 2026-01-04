@@ -3,3 +3,5 @@ coverage/
 pnpm-lock.yaml
 web-types.json
 src/styles/presets.css
+.vitepress/cache/
+.vitepress/dist/
