@@ -4,65 +4,65 @@ import { vViewport } from '../directives/vViewport'
 import type { ViewportOptions, ViewportDirection } from '../types'
 
 defineOptions({
-  name: 'Viewport'
+  name: 'VViewport',
 })
 
 const props = defineProps({
   /** The HTML tag to render. Defaults to 'div'. */
   as: {
     type: String,
-    default: 'div'
+    default: 'div',
   },
   /** The animation preset name (e.g., 'fade-up'). */
   preset: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   /** Delay in ms or CSS string (e.g. '100ms'). Set to true to use global variable. */
   stagger: {
     type: [Number, String, Boolean] as PropType<ViewportOptions['stagger']>,
-    default: undefined
+    default: undefined,
   },
   /** Intersection threshold (0.0 - 1.0). */
   threshold: {
     type: [Number, Array] as PropType<ViewportOptions['threshold']>,
-    default: undefined
+    default: undefined,
   },
   /** Custom rootMargin string. */
   rootMargin: {
     type: String as PropType<ViewportOptions['rootMargin']>,
-    default: undefined
+    default: undefined,
   },
   /** If true, disconnects the observer after the first entry. */
   once: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /** Custom root element (defaults to viewport). */
   root: {
     type: Object as PropType<ViewportOptions['root']>,
-    default: undefined
+    default: undefined,
   },
   /** Custom duration for the animation. */
   duration: {
     type: [Number, String] as PropType<ViewportOptions['duration']>,
-    default: undefined
+    default: undefined,
   },
   /** Custom delay for the animation. */
   delay: {
     type: [Number, String] as PropType<ViewportOptions['delay']>,
-    default: undefined
+    default: undefined,
   },
   /** Custom easing for the animation. */
   easing: {
     type: String,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 const emit = defineEmits<{
-  (e: 'enter', payload: { entry: IntersectionObserverEntry, direction: ViewportDirection }): void
-  (e: 'leave', payload: { entry: IntersectionObserverEntry, direction: ViewportDirection }): void
+  (e: 'enter', payload: { entry: IntersectionObserverEntry; direction: ViewportDirection }): void
+  (e: 'leave', payload: { entry: IntersectionObserverEntry; direction: ViewportDirection }): void
 }>()
 
 // Construct options object for the directive
@@ -81,15 +81,12 @@ const viewportOptions = {
   },
   onLeave: (entry: IntersectionObserverEntry, direction: ViewportDirection) => {
     emit('leave', { entry, direction })
-  }
+  },
 }
 </script>
 
 <template>
-  <component 
-    :is="props.as"
-    v-viewport="viewportOptions"
-  >
+  <component :is="props.as" v-viewport="viewportOptions">
     <slot />
   </component>
 </template>

@@ -10,7 +10,7 @@ import type { ViewportOptions, ViewportDirection, ResolvedConfig } from '../type
  */
 function resolveConfig(binding: DirectiveBinding<ViewportOptions | string>): ResolvedConfig {
   const { value, modifiers, arg } = binding
-  
+
   let options: ViewportOptions = {}
   let animationName: string | undefined = arg
 
@@ -34,17 +34,20 @@ function resolveConfig(binding: DirectiveBinding<ViewportOptions | string>): Res
  * - string: parses "100ms", "0.5s"
  * - true: reads --viewport-stagger CSS variable
  */
-function resolveStaggerValue(value: number | string | boolean | undefined, el: HTMLElement): number {
+function resolveStaggerValue(
+  value: number | string | boolean | undefined,
+  el: HTMLElement,
+): number {
   if (typeof value === 'number') return value
-  
+
   if (typeof value === 'string') return parseDelay(value)
-  
+
   if (value === true) {
     const style = getComputedStyle(el)
     const cssVar = style.getPropertyValue('--viewport-stagger').trim()
     return parseDelay(cssVar || '100ms')
   }
-  
+
   return 0
 }
 
@@ -53,10 +56,10 @@ function resolveStaggerValue(value: number | string | boolean | undefined, el: H
  * Sets data attributes for entry direction and in-view state.
  */
 function handleEnter(
-  el: HTMLElement, 
-  entry: IntersectionObserverEntry, 
-  direction: ViewportDirection, 
-  options: ViewportOptions
+  el: HTMLElement,
+  entry: IntersectionObserverEntry,
+  direction: ViewportDirection,
+  options: ViewportOptions,
 ): void {
   const task: StaggerTask = { el, entry, direction, options }
   const staggerValue = resolveStaggerValue(options.stagger, el)
@@ -74,10 +77,10 @@ function handleEnter(
  * Removes in-view attribute and sets position (above/below).
  */
 function handleLeave(
-  el: HTMLElement, 
-  entry: IntersectionObserverEntry, 
-  direction: ViewportDirection, 
-  options: ViewportOptions
+  el: HTMLElement,
+  entry: IntersectionObserverEntry,
+  direction: ViewportDirection,
+  options: ViewportOptions,
 ): void {
   // Reset delay to the original option value on leave
   if (options.delay !== undefined) {
@@ -88,19 +91,21 @@ function handleLeave(
 
   delete el.dataset.vpInView
   delete el.dataset.vpEntry
-  
+
   const rect = entry.boundingClientRect
   if (rect.top < 0) {
     el.dataset.vpPos = 'above'
   } else if (rect.bottom > window.innerHeight) {
     el.dataset.vpPos = 'below'
   }
-  
+
   options.onLeave?.(entry, direction)
 
-  el.dispatchEvent(new CustomEvent('view-leave', {
-    detail: { entry, direction }
-  }))
+  el.dispatchEvent(
+    new CustomEvent('view-leave', {
+      detail: { entry, direction },
+    }),
+  )
 }
 
 const observers = new WeakMap<HTMLElement, ObserverInstance>()
@@ -126,11 +131,11 @@ const staggerMap = new WeakMap<HTMLElement, StaggerState>()
  */
 function parseDelay(value: string): number {
   if (!value) return 0
-  // Handle multiple values (e.g. "0s, 0.5s"), take the max or first? 
-  // Usually transition-delay matches transition-property count. 
+  // Handle multiple values (e.g. "0s, 0.5s"), take the max or first?
+  // Usually transition-delay matches transition-property count.
   // We take the max value found to be safe, or just the first.
   // Let's split by comma and take the max to ensure we don't cut off a long delay.
-  const delays = value.split(',').map(v => {
+  const delays = value.split(',').map((v) => {
     const match = /([\d.]+)(m?s)/.exec(v.trim())
     if (!match) return 0
     const num = parseFloat(match[1])
@@ -148,8 +153,8 @@ function performEnter(task: StaggerTask, staggerDelay: number = 0) {
 
   // Calculate total delay: existing CSS delay + stagger delay
   let totalDelay = staggerDelay
-  
-  // Only read computed style if we have a stagger to apply, 
+
+  // Only read computed style if we have a stagger to apply,
   // otherwise we just let the CSS delay work as is.
   if (staggerDelay > 0) {
     const style = getComputedStyle(el)
@@ -163,16 +168,18 @@ function performEnter(task: StaggerTask, staggerDelay: number = 0) {
 
   // Set entry direction
   el.dataset.vpEntry = direction
-  
+
   // Clear position attributes as it's now in view
   delete el.dataset.vpPos
 
   // Trigger callback
   options.onEnter?.(entry, direction)
 
-  el.dispatchEvent(new CustomEvent('view-enter', {
-    detail: { entry, direction }
-  }))
+  el.dispatchEvent(
+    new CustomEvent('view-enter', {
+      detail: { entry, direction },
+    }),
+  )
 
   requestAnimationFrame(() => {
     el.dataset.vpInView = ''
@@ -189,7 +196,7 @@ function flushStaggerQueue(parent: HTMLElement, staggerValue: number) {
 
   const sortedQueue = state.queue.sort((a, b) => {
     // Sort by DOM order
-    return (a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1
+    return a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
   })
 
   sortedQueue.forEach((task, index) => {
@@ -236,7 +243,7 @@ function formatTime(value: number | string | undefined): string | undefined {
 
 /**
  * Vue Directive: v-viewport
- * 
+ *
  * Detects when an element enters the viewport and applies animation states via data attributes.
  * Uses data-vp-* attributes to avoid conflicts with Vue's class binding.
  */
@@ -247,7 +254,7 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
     el.dataset.vpMounted = ''
 
     const { options, animationName } = resolveConfig(binding)
-    
+
     // Apply inline style overrides if provided in options
     if (options.duration !== undefined) {
       el.style.transitionDuration = formatTime(options.duration)!
@@ -264,10 +271,10 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
       // Strict mode: Only accept valid presets from ACTIVE_PRESETS
       const tokens = animationName.split(/\s+/)
       const validPresets = tokens
-        .map(token => ACTIVE_PRESETS[token])
+        .map((token) => ACTIVE_PRESETS[token])
         .filter((preset): preset is string => !!preset)
         .join(' ')
-      
+
       if (validPresets) {
         el.dataset.vpPreset = validPresets
       }
@@ -279,7 +286,7 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
 
   mounted(el, binding) {
     const { options, animationName, once } = resolveConfig(binding)
-    
+
     const observerOptions: IntersectionObserverInit = {
       root: options.root || null,
       rootMargin: options.rootMargin || computeDefaultRootMargin(el, animationName),
@@ -292,7 +299,7 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
     const instance = observerManager.observe(el, observerOptions, (entry) => {
       const isInView = entry.isIntersecting
       const scrollY = window.scrollY
-      
+
       const direction = scrollY >= lastScrollY ? 'down' : 'up'
       lastScrollY = scrollY
 
@@ -303,7 +310,7 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
         handleLeave(el, entry, direction, options)
       }
     })
-    
+
     observers.set(el, instance)
   },
 
@@ -313,5 +320,5 @@ export const vViewport: Directive<HTMLElement, ViewportOptions | string> = {
       observerManager.unobserve(instance, el)
       observers.delete(el)
     }
-  }
+  },
 }

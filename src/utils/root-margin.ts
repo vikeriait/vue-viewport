@@ -2,15 +2,16 @@
  * Parses Tailwind classes to determine intelligent margins.
  * Handles prefixes like 'below:' and 'above:' for asymmetric margins.
  */
-function parseTailwindMargins(className: string): { top: number, bottom: number } {
+function parseTailwindMargins(className: string): { top: number; bottom: number } {
   let top = 0
   let bottom = 0
-  const regex = /(?:(?<prefix>[a-z0-9:-]+):)?(?<neg>-)?translate-y-(?:\[(?<arb>[^\]]+)\]|(?<num>\d+))/gi
-  
+  const regex =
+    /(?:(?<prefix>[a-z0-9:-]+):)?(?<neg>-)?translate-y-(?:\[(?<arb>[^\]]+)\]|(?<num>\d+))/gi
+
   let match
   while ((match = regex.exec(className)) !== null) {
     const { prefix, arb, num } = match.groups || {}
-    
+
     let px = 0
     if (arb) {
       if (arb.endsWith('px')) px = parseFloat(arb)
@@ -23,7 +24,7 @@ function parseTailwindMargins(className: string): { top: number, bottom: number 
       const margin = Math.ceil(px + 10)
       const isBelow = prefix && prefix.includes('below')
       const isAbove = prefix && prefix.includes('above')
-      
+
       if (isBelow) bottom = Math.max(bottom, margin)
       else if (isAbove) top = Math.max(top, margin)
       else {
@@ -38,23 +39,26 @@ function parseTailwindMargins(className: string): { top: number, bottom: number 
 /**
  * Checks if the animation name implies movement and reads the global CSS variable.
  */
-function checkPresetHeuristics(el: HTMLElement, animationName?: string): { top: number, bottom: number } {
-  const nameHasMovement = animationName && (
-    animationName.includes('slide') || 
-    (animationName.includes('fade-') && !animationName.includes('fade-in')) ||
-    animationName.includes('scale')
-  )
+function checkPresetHeuristics(
+  el: HTMLElement,
+  animationName?: string,
+): { top: number; bottom: number } {
+  const nameHasMovement =
+    animationName &&
+    (animationName.includes('slide') ||
+      (animationName.includes('fade-') && !animationName.includes('fade-in')) ||
+      animationName.includes('scale'))
 
   if (nameHasMovement) {
     try {
       const style = getComputedStyle(el)
       const value = style.getPropertyValue('--viewport-distance').trim()
-      
+
       if (value) {
         let presetPx = 0
         if (value.endsWith('px')) presetPx = parseFloat(value)
         else if (value.endsWith('rem')) presetPx = parseFloat(value) * 16
-        
+
         const margin = Math.ceil(presetPx)
         return { top: margin, bottom: margin }
       }
@@ -66,11 +70,11 @@ function checkPresetHeuristics(el: HTMLElement, animationName?: string): { top: 
 /**
  * Checks the computed style matrix for any active transforms (inline or custom CSS).
  */
-function checkComputedMatrix(el: HTMLElement): { top: number, bottom: number } {
+function checkComputedMatrix(el: HTMLElement): { top: number; bottom: number } {
   try {
     const style = getComputedStyle(el)
     const transform = style.transform
-    
+
     if (transform && transform !== 'none') {
       const matrix = transform.match(/^matrix\((.+)\)$/)
       if (matrix) {
@@ -79,7 +83,7 @@ function checkComputedMatrix(el: HTMLElement): { top: number, bottom: number } {
           const ty = Math.abs(values[5])
           const tx = Math.abs(values[4])
           const maxShift = Math.max(tx, ty)
-          
+
           if (maxShift > 0) {
             const margin = Math.ceil(maxShift)
             return { top: margin, bottom: margin }

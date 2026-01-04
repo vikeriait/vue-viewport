@@ -25,7 +25,7 @@ class ObserverManager {
   observe(
     el: HTMLElement,
     options: IntersectionObserverInit,
-    callback: ObserverCallback
+    callback: ObserverCallback,
   ): ObserverInstance {
     const root = options.root || null
     const rootMargin = options.rootMargin || '0px'
@@ -43,25 +43,28 @@ class ObserverManager {
     // 3. Get or Create the Observer Instance
     let instance = rootMap.get(key)
     if (!instance) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          const target = entry.target as HTMLElement
-          // Retrieve the callback specifically for this observer instance
-          // This allows multiple observers to watch the same element with different callbacks
-          const cb = instance?.elements.get(target)
-          if (cb) cb(entry)
-        })
-      }, {
-        root,
-        rootMargin,
-        threshold
-      })
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const target = entry.target as HTMLElement
+            // Retrieve the callback specifically for this observer instance
+            // This allows multiple observers to watch the same element with different callbacks
+            const cb = instance?.elements.get(target)
+            if (cb) cb(entry)
+          })
+        },
+        {
+          root,
+          rootMargin,
+          threshold,
+        },
+      )
 
-      instance = { 
-        observer, 
+      instance = {
+        observer,
         elements: new Map(),
         root,
-        key
+        key,
       }
       rootMap.set(key, instance)
     }
@@ -69,7 +72,7 @@ class ObserverManager {
     // 4. Observe
     instance.observer.observe(el)
     instance.elements.set(el, callback)
-    
+
     return instance
   }
 
@@ -83,7 +86,7 @@ class ObserverManager {
     // Cleanup if empty
     if (instance.elements.size === 0) {
       instance.observer.disconnect()
-      
+
       const rootMap = this.roots.get(instance.root)
       if (rootMap) {
         rootMap.delete(instance.key)
