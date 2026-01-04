@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.2.0
+
+[compare changes](https://github.com/vikeriait/vue-viewport/compare/v1.1.1...v1.2.0)
+
+### 🚀 Enhancements
+
+- **docs:** Add comprehensive documentation with interactive examples ([5bc8191](https://github.com/vikeriait/vue-viewport/commit/5bc8191))
+
+### ❤️ Contributors
+
+- Matteo Di Ninno <matteo.dininno@vikeria.it>
+
 ## v1.1.1
 
 [compare changes](https://github.com/vikeriait/vue-viewport/compare/v1.1.0...v1.1.1)
