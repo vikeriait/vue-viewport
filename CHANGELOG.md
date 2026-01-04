@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.1.1
+
+[compare changes](https://github.com/vikeriait/vue-viewport/compare/v1.1.0...v1.1.1)
+
+### 💅 Refactors
+
+- Standardize linting and component naming ([6935664](https://github.com/vikeriait/vue-viewport/commit/6935664))
+
+### ❤️ Contributors
+
+- Matteo Di Ninno <matteo.dininno@vikeria.it>
+
 ## v1.1.0
 
 [compare changes](https://github.com/vikeriait/vue-viewport/compare/v1.0.0...v1.1.0)
